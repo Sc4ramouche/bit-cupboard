@@ -1,6 +1,8 @@
-## long-polling
+# long-polling
 
-Long-polling is something like the following workflow: 
+## idea
+
+Long-polling is something like the following workflow:
 
 1. client sends request to server
 2. server leave the connection opened, i.e. it doesn't responds immediately
