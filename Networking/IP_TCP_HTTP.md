@@ -111,3 +111,43 @@ Here you can see how the ends establish three handshakes. But there are addition
 `mss` specifies the `Maximum Segment Size`, which is the maximum number of bytes that this end is willing to receive in a single segment. `wscale` is the window scale factor.
 
 ### Connection Data Flow
+
+When the connection is created, both ends can send data to the other end. The receiving end will acknowledge packets as they are received by sending back segments with the corresponding **ACK** in the header. This looks something like this:
+
+```
+host A sends segment with seq 10
+host A sends segment with seq 20
+host A sends segment with seq 30    host B sends segment with ack 10
+host A sends segment with seq 35    host B sends segment with ack 20
+                                    host B sends segment with ack 30
+                                    host B sends segment with ack 35
+```
+
+Host A will keep sending packets. As they arrive at host B, host B will send acknowledgements for these packets back to host A. But host A will keep sending packets without waiting for host B to acknowledge them.
+
+There are flow control mechanisms for congestion control. They are about figuring out if segments got lost and need to be retransmitted and if it's needed to adjust the rate at which segments are sent, thus making sure we are not sending data faster then the receiver could process. Receiver can send a _receive window_, which tells the sender how much more data the receiver can buffer. In the log presented above in **options** section we see `win 65535` – window size, and a `wscale 4` – scale factor. As a result, host says it has receive window of _4 \* 64_ kB. As either side receives data, it will send an updated receive window of the other end.
+
+Congestion control is quite complex. It's obvious desire to send packages as fast as possible, but it could result in drastic performance drop. It's called congestive collapse and it's inherent to packet-switched networks. When too many packets are sent, they will collide with other packets and the packet loss rate will climb dramatically.
+
+### another example:
+
+```
+18:31:29.150955 IP 10.0.1.6.52181 > 23.63.125.15.80: Flags [P.], seq 1721092980:1721093065, ack 673593778, win 8235, options [nop,nop,TS val 743929773 ecr 1433256622], length 85
+18:31:29.161213 IP 23.63.125.15.80 > 10.0.1.6.52181: Flags [.], ack 1721093065, win 7240, options [nop,nop,TS val 1433256633 ecr 743929773], length 0
+```
+
+The client `10.0.1.6` sends the first segment with data `length 85` (the HTTP request, 85 bytes). The **ACK** number is left at the same value, because no data has been received from the other end since the last segment.
+
+The server at `23.63.125.15` then acknowledges the receipt of that data (but doesn't send any data): `length 0`. The sequence number and acknowledgment numbers are byte ranges: 1721092980 to 1721093065 is 85 bytes. When the other end sends `ack` 1721093065, that means: I have everything up to byte 1721093065.
+
+### Connection Termination
+
+Each end sends a **FIN** flag to the other end. This **FIN** is then acknowledged.
+
+```
+18:31:29.199029 IP 10.0.1.6.52181 > 23.63.125.15.80: Flags [F.], seq 1721093065, ack 673608401, win 8192, options [nop,nop,TS val 743929819 ecr 1433256660], length 0
+18:31:29.208416 IP 23.63.125.15.80 > 10.0.1.6.52181: Flags [F.], seq 673608401, ack 1721093066, win 7240, options [nop,nop,TS val 1433256680 ecr 743929819], length 0
+18:31:29.208493 IP 10.0.1.6.52181 > 23.63.125.15.80: Flags [.], ack 673608402, win 8192, options [nop,nop,TS val 743929828 ecr 1433256680], length 0
+```
+
+Note how on the second line host sends its **FIN**, and at the same time acknowledges the other end's **FIN** with an **ACK** (dot), all in a single segment.
