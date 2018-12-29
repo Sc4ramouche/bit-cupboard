@@ -151,3 +151,33 @@ Each end sends a **FIN** flag to the other end. This **FIN** is then acknowledge
 ```
 
 Note how on the second line host sends its **FIN**, and at the same time acknowledges the other end's **FIN** with an **ACK** (dot), all in a single segment.
+
+## HTTP – Hypertext Transfer Protocol
+
+HTTP uses a simple request/response mechanism. There is always a single request and a single response, both following the same format. See more on HTTP in dedicated notes.
+
+## HTTPS – HTTP Secure
+
+Transport Layer Security is cryptographic protocol that runs on top of TCP. It allows for two things: both ends can verify the identity of the other end and data sent between both ends is encrypted.
+
+## Common Issues
+
+There are two big issues with TCP connection: setup and end of data transfer. Setup is costly cause of three handshakes and could become even more costly in case of HTTPS, cause TLS connection needs another three-way handshake.
+
+When we do an HTTP request, server will keep sending TCP fragments to client host, and the host will respond with **ACK** messages as it receives the data. If a segment is lost along the way, the server will not receive **ACK** for that segment. In such case server will do fast retransmit: when the packet is lost, the following packet will cause the receiver to send an **ACK** identical to the last **ACK** it sent. The sender will fast retransmit packet if it receives three duplicate ACKs (as there are other cases when **ACK** could get duplicated).
+
+At the end of data transmission the sender stops sending segments, the receiver stops sending ACKs back, so there's no way to fast retransmit algorithm to detect if a packet is lost within the last four segments (~ 5.7 kB) being sent.
+
+HTTP has two strategies for resolving above issues, the first one is persistent connection (keep-alive). HTTP will simply reuse the same connection once single request-response cycle is done. TLS connection is also stays alive in case of HTTPS.
+
+HTTP pipelining is the second strategy which allows sending multiple requests without waiting for response. This could be done in parallel. But from the server side it's still first-in first-out.
+
+These techniques allow us to use TCP in a more efficient way. We don't need to do handshake for every request-response. TCP congestion algorithm performs in a better way. Fast retransmit problem will persist only for last four segments of the entire **connection**, not for every request-response.
+
+## Caching
+
+"The fastest request is one never made". Use caching (HTTP ETag). Cache resources whenever you think that they'll stay valid for some time.
+
+### Note on mobile phones
+
+When you switch to Wi-Fi from 3G and vice versa you have to establish new connection, as you IP changes and the server now needs to send segments to the new address.
