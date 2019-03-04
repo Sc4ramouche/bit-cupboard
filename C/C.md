@@ -46,3 +46,48 @@ int get_line(void)
 ```
 
 Another reason to do this is to achive compatibility with older C standarts.
+
+## structures
+
+Structures are used to declare new *types*:
+
+```C
+typedef struct {
+    float x;
+    float y;
+} point;
+```
+
+You can use structures like the following:
+
+```C
+point p;
+p.x = 42;
+p.y = 3.17;
+
+float length = sqrt(p.x * p.x + p.y * p.y);
+``` 
+
+## enum
+
+An enumeration is a list of constant integer values:
+
+```C
+enum boolean { NO, YES };
+```
+
+The first name in an enum has value 0, the next 1 and so on, unless explicit values are specified.
+
+## const
+
+The qualifier `const` can be applied to the declaration of any variable to specify that its value will not be changed:
+
+```C
+const double e = 2.71828182845905;
+```
+
+The `const` declaration can also be used with array arguments, to indicate that the function does not change that array:
+
+```C
+int strlen(const char[]);
+```
