@@ -26,3 +26,23 @@ If an arithmetic operator has integer operands, an integer operation is performe
 ## EOF
 
 Special value equals to `-1`. You can put it into terminal with `Ctrl+D`.
+
+## command line arguments
+
+You can pass arguments to your C program. Conventionally it looks like this:
+
+```C
+int main(int argc, char** argv) { /* ... */ }
+```
+
+`argc` used to denote number of command line arguments. Note that it would always be >= 1, because name of the program counts as the first argument. Rest of the command line arguments end up split by whitespaces and pushed to the `argv` array.
+
+## arguments
+
+If you want to declare a function which doesn't accept any arguments you can state it implicitly:
+
+```C
+int get_line(void)
+```
+
+Another reason to do this is to achive compatibility with older C standarts.
