@@ -68,6 +68,14 @@ p.y = 3.17;
 float length = sqrt(p.x * p.x + p.y * p.y);
 ``` 
 
+And you can shallow copy structures by simple assignment:
+
+```C
+BITMAPINFOHEADER bi;
+/* fill bi with content */
+BITMAPINFOHEADER outbi = bi;
+```
+
 ## enum
 
 An enumeration is a list of constant integer values:
@@ -117,6 +125,41 @@ This concept leads to another called *pointer arithmetic*. Operator `*` is used 
 We are able to get rid of brackets notation, as it is kind of syntactic sugar. And `*(s + 1)` is simply saying 'go to the address `s + 1` and give me back value stored there'. This is works because our string is stored in continious chunk of memory. So if `s` is pointing to `'a'`, `s + 1` would point to `'w'`.
 
 In the latter case `*` means 'go to that pointer', but when we see something like `char *s` – that means 'give me the pointer'.
+
+We can summarize it as **pointer** is a data item whose value is a *memory address*. Type of the pointed describes the data located at that memory address.
+
+**Important**: every time you create a pointer and you don't set its value immediately, you should always set the value of the pointer to `NULL`.
+
+### dereferencing
+
+The main purpose of a pointer is to allow us to modify or inspect the location to which it points.
+
+If we have a pointer-to-char called `pc`, then `*pc` is the data that lives at the memory address stored inside the variable `pc`.
+
+```C
+char c = 'L';
+char *pc = &c;
+*pc = 'D';       // dereferencing
+```
+
+In the context of the statement `*pc = 'D'` `*` operator is known as the *dereference operator*. It "goes to the reference" and accesses the data that memory location, allowing you to manipulate it at will.
+
+### pointers summary
+
+```C
+int* p;
+```
+
+* The value of `p` is an address.
+* We can dereference `p` with the `*` operator.
+* If we do, what we'll find at that location is an `int` value.
+
+To create several pointers at one line:
+
+```C
+int* px, py, pz;      // wrong
+int* pa, *pb, *pc;    // right
+```
 
 ## addresses
 
@@ -173,3 +216,97 @@ Another one:
 ```
 
 There is potentially an overflow issue: what if user provides too long of a string? In this case you'll deal with overflow.
+
+## type conversions
+
+In general, the only automatic conversions are those that convert a "narrower" operand into a "wider" one without losing information, such as converting an integer to floating point in an expression like `f + i`. Expressions that might lose information may draw a warning, but they are not illegal.
+
+If arguments are declared by a function prototype, the declaration causes automatic coercion of any arguments when the function is called.
+
+In the following snippet integer `2` coerced to the *double* value `2.0`:
+
+```C
+// prototype
+double sqrt(double);
+// implicit coercion to 2.0
+root = sqrt(2);
+```
+
+### cast type
+
+You can explicitly cast value to another type:
+
+```C
+sqrt((double) n)
+```
+
+
+### exercises
+
+Complete 2.3 (page 60)
+
+## stack and heap
+
+`malloc` allocates memory from the heap, but anytime you declare local variables or arrays inside of the function that ends up on the stack. So `malloc`, `calloc` and `realloc` are the only tools that give access to the heap.
+
+## array limitations
+
+Usually we declare arrays in C with predefined capacity. In case you need more space in array you would have to allocate bigger memory chunk and copy existing array to it. Or you could use `realloc`, which is effectively transfers allocated memory to new location, if such available and frees previous occupied memory.
+
+```C
+// extend `numbers` by one element
+numbers = realloc(numbers, sizeof(int) * (size + 1));
+```
+
+Manual allocation is not effective: you actually need twice as much memory to copy everything. Also it's not quite good from time perspective – copying is *O(n)* operation. There is another issue – for array you need contiguous chunk of memory and your sistem could not have one (or its memory is *fragmeneted*).
+
+## linked list
+
+Linked list is a data structure represented by cells, each having value and pointer for the next value. Linked lists do not solve memory inefficiency. But it solves the fragmented memory problem, as you can store every member in any location.
+
+```C
+typedef struct node
+{
+    int number;
+    struct node *next;
+}
+node;
+```
+
+Following example represent code that checks whether number is already in linked list:
+
+```C
+bool found = false;
+for (node *ptr = numbers; ptr != NULL; ptr = ptr->next)
+{
+    if (ptr->number == number)
+    {
+        found = true;
+        break;
+    }
+}
+```
+
+Syntax `->` is used for operation described as "follow the pointer and extract `number` from scrtucture found there".
+
+Adding new value to the list:
+
+```C
+node *n = malloc(sizeof(node));
+
+n->number = number;
+n->next = NULL;
+if (numbers)
+{
+    for(node *ptr = numbers; ptr != NULL; ptr = ptr->next)
+    {
+        if(!ptr->next) 
+        {
+            ptr->next = n;
+            break;
+        }
+    }
+}
+else
+    numbers = n;
+```
