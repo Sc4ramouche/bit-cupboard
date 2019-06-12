@@ -56,7 +56,7 @@ Note: **always** use raw string when dealing with regular expressions.
 
 ## Logical and Physical Line
 
-Physical line is basically line of code. A *logical* line is what Python seeas a single statement. Python implicitly assumes that each physical line corresponds to a logical line. If you want to specify more than one logical line on a single physical line – use semicolon (`;`):
+Physical line is basically line of code. A *logical* line is what Python see as a single statement. Python implicitly assumes that each physical line corresponds to a logical line. If you want to specify more than one logical line on a single physical line – use semicolon (`;`):
 
 ```Python
 i = 5; print(i);

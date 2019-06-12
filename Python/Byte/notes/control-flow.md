@@ -41,7 +41,7 @@ else:
 
 Surprisingly, `for` loop supports `else` statement. It's optional, always executed once after the `for` loop is over **unless** a `break` statement is encountered.
 
-The `for` loop iterates over `range(1, 5)` in the example above, which is equivalent to `for i in [1, 2, 3, 4]` which is like assigning each number (or object) in sequence to i, one at a time, and then executing the block of statements for each value of `i`.
+The `for` loop iterates over `range(1, 5)` in the example above, which is equivalent to `for i in [1, 2, 3, 4]` which is like assigning each number (or object) in sequence to 'i', one at a time, and then executing the block of statements for each value of `i`.
 
 In general, we can use `for..in` loop with any kind of sequence of any kind of objects.
 
