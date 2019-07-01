@@ -9,7 +9,7 @@ struct Car {
 }
 
 // initialization
-let car = Car(mark: "Motors" model: "T80")
+let car = Car(mark: "Motors", model: "T80")
 ```
 
 Unlike classes, structs don't need explicit initializer in case there's no complex initializating logic involved – compiler will automatically generate standard initializer.

@@ -4,7 +4,7 @@ Swift is object-oriented language.
 
 ```Swift
 class Car {
-    let mark: String
+    let make: String
     let model: String
     var mileage: Int
 
@@ -97,7 +97,7 @@ Swift doesn't have a concept of constructor and destructor. The are *initializat
 ```Swift
 class Car {
     init(make: String, model: String) {
-        self.mark = mark
+        self.make = make
         self.model = model
         super.init()
     }

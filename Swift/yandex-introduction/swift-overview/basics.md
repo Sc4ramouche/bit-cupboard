@@ -23,7 +23,7 @@ var b2: Int = 20
 Swift has a way to declare a variable that may or may not contain a value:
 
 ```Swift
-var maybeThing: String? = nl
+var maybeThing: String? = nil
 maybeThing = "Hi"
 ```
 
