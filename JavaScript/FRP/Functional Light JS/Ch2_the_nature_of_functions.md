@@ -2,7 +2,7 @@
 
 ## Morphism
 
-Fancy way of describing correlation between two sets of values - like input to output values. 
+Fancy way of describing correlation between two sets of values - like input to output values.
 
 ## Function vs Procedure
 
@@ -76,7 +76,7 @@ With objects destructuring comes neat detail: we don't care about `x` at our cal
 
 ## Function Output
 
-In JavaScript functions actually always return a value. There three function have save behaviour:
+In JavaScript functions actually always return a value. There three function have same behaviour:
 
 ```JavaScript
 function foo() {}

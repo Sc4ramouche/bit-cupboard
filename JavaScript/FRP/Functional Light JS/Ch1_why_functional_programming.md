@@ -2,7 +2,7 @@
 
 ## Confidence
 
-Author implies that FP code (eventyally) becomes more readable: you can ensure that your program is doing well just by reading it's source, not by running test suite. That's not doing FP bug-proof, but usually bugs exist in more obvious places.
+Author implies that FP code (eventually) becomes more readable: you can ensure that your program is doing well just by reading it's source, not by running test suite. That's not doing FP bug-proof, but usually bugs exist in more obvious places.
 
 ## Communication
 
