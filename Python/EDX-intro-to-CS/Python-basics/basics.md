@@ -4,6 +4,13 @@
 
 Python uses *objects* as a values.
 
+You can use handy `is` operator to check for particular type, like this:
+
+```Python
+if type(varA) is str:
+    print('string')
+```
+
 ### Scalar Objects
 
 * `int` – represent *integers*, ex. `5`
@@ -41,4 +48,18 @@ bool(42)    # True
 
 # copy a string
 'Gratitude'[:]      # 'Gratitude'
+```
+
+## Control Flow
+
+If you need descending `range` you can use `reversed` function:
+
+
+```Python
+for i in reversed(range(2, 11, 2):
+    print(i)    # 10, 8, 6, 4, 2
+
+# or just with negative range argument
+for i in range(10, 1, -2)
+    print(i)    # 10, 8, 6, 4, 2
 ```

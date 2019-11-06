@@ -61,7 +61,7 @@ Usually one MVC is used to control one screen on iPhone. It may control part of 
 
 So if we have multiple MVCs, the higher MVC treats other MVCs as part of it's *View*.
 
-# Structs and Classes
+## Structs and Classes
 
 In Swift structs are very similar to Classes. But they have two major differences:
 
@@ -72,7 +72,7 @@ For the second statements: value types gets copied when it's passed around. This
 
 For the reference type, when you pass it around you just pass the pointer to it.
 
-# Side Notes from the lecture
+## Side Notes from the lecture
 
 Array are structures in Swift, so they're value type. So there's several methods to add two identical things to array:
 

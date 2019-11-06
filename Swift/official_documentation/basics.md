@@ -26,7 +26,7 @@ let maxValue = UInt8.max  // 255
 
 ### `UInt`
 
-Use `UInt` only when you specifically need an unsigned integer type with the same size as the platform's native word size. If this isn't the case, `Int` is preferred, even when the values to be stored are known to be nonnegative.e
+Use `UInt` only when you specifically need an unsigned integer type with the same size as the platform's native word size. If this isn't the case, `Int` is preferred, even when the values to be stored are known to be nonnegative.
 
 ## Type Aliases
 
@@ -56,7 +56,7 @@ let (justTheStatusCode, _) = http404Error
 print("Status code: \(http404Error.0)")    // Status code: 404
 ```
 
-You can anme the individual elements in a tuple when the tuple is defined. You can use these names to access the values later:
+You can name the individual elements in a tuple when the tuple is defined. You can use these names to access the values later:
 
 ```Swift
 let http200Status = (statusCode: 200, description: "OK")

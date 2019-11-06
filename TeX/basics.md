@@ -57,3 +57,34 @@ x^5 - 7x^3 + 4x
 \int_{2}^{3} x^2 dx % integral
 \end{equation}
 ```
+
+## Images
+
+To use images in the document you'd have to enable `graphicx` package:
+
+```TeX
+\usepackage{graphicx}
+
+\includegraphics[scale=2, angle=45]{filename}
+```
+
+To insert image you need to use `\includegraphics` with filename without extension. This statement supports parameters. Possible options:
+
+* scale
+* height
+* width
+* angle
+
+If you need to create caption for the image, `figure` environment is way to go. By default it creates figure on separate page, but you can specify `h` option which stands for *here*, `b` for bottom and `t` for top of the page. Another option is `p` – put it on separate page. You can add `!` (exclamation mark) to override LaTeX idea of where should we put the image. Lastly, there is *capital H* (`H`) which places image at exact location. To use this is you may need to use `float` package.
+
+```TeX
+\begin{figure}[h]
+\centering
+\includegraphics[width=64, height=64]={beatifulCat}
+\caption{This is the picture of beatiful cat}
+\label{fig:cat}
+
+% somewhere else in the document
+See figure \ref{fig:cat} on page \pageref{fig:cat}
+\end{figure}
+```
