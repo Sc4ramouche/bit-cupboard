@@ -72,3 +72,7 @@ This is nicely demonstrated by binary representation itself, like:
 `x = 1*2^4 + 0*2^3 + 0*2^2 + 1*2^1 + 1*2^0 = 10011`
 
 `x // 2 = 1*2^3 + 0*2^2 + 0*2^1 + 1*2^0 = 1001`
+
+## Newton-Raphson
+
+TODO: revisit this idea concept later.
