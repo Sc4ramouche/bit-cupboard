@@ -58,3 +58,17 @@ while abs(ans ** 2 - x) >= epsilon:
 
 print(str(ans) + ' is close to square root of ' str(x))
 ```
+
+## Binary representations
+
+There's nice little algorithm of converting integer to binary. Consider we have an `x` (let it be `10011` for example purposes):
+
+1. Take remainder relative to 2 (`x % 2`) of `x` – this gives last binary bit
+2. Divide `x` by 2 integer wise (`x // 2`) – all the bits get shifted right
+3. Repeat
+
+This is nicely demonstrated by binary representation itself, like:
+
+`x = 1*2^4 + 0*2^3 + 0*2^2 + 1*2^1 + 1*2^0 = 10011`
+
+`x // 2 = 1*2^3 + 0*2^2 + 0*2^1 + 1*2^0 = 1001`
