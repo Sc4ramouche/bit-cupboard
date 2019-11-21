@@ -40,3 +40,28 @@ When you design induction algorithm, you can take the advantage of _mathematical
 
 - Prove it is true when `n` is smallest value (e.g. `n = 0` or `n = 1`)
 - Then prove that if it is true for an arbitrary value of `n`, one can show that it must be true for `n + 1`
+
+## Tower of Hanoi
+
+Tower of Hanoi is a math puzzle where we have **three** rods and `n` disks. The objective is to move the entire stack to another rod, obeying the rules:
+
+1. only onde disk can be moved at a time
+2. a disk can only be moved if it is the uppermost disk on a stack
+3. no disk may be placed on top of a smaller disk
+
+Python solution for this puzzle:
+
+```Python
+def printMove(fr, to):
+    print('move from ' + str(fr) + ' to ' + str(to))
+
+def Towers(n, fr, to, spare):
+    if n == 1:    # this is recurion base case
+        printMove(fr, to)
+    else:
+        Towers(n - 1, fr, spare, to)
+        Towers(1, fr, to, spare)
+        Towers(n - 1), spare, to, fr)
+```
+
+In this code `n` is total number of disks in initial stack, `fr` – initial rod, from which we're going to move the whole stack, `to` – destionation, and `spare` – auxiliary rod we'll use to move disks.
