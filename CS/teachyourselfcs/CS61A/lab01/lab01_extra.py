@@ -14,6 +14,10 @@ def falling(n, k):
     >>> falling(4, 0)
     1
     """
+    total = 1
+    while k > 0:
+        total = total * n
+        n -= 1
     "*** YOUR CODE HERE ***"
 
 def double_eights(n):
@@ -31,4 +35,11 @@ def double_eights(n):
     >>> double_eights(80808080)
     False
     """
+    while n > 0:
+        eights = n % 100
+        if eights / 88 == 1:
+            return True
+        else:
+            n = n // 10
+    return False
     "*** YOUR CODE HERE ***"
