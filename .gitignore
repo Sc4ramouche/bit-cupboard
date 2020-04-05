@@ -1,5 +1,8 @@
 node_modules/
 
+# CS61A
+tests/
+
 # compiled rust projects
 target/
 
