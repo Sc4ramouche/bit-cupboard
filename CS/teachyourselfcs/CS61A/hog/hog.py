@@ -21,7 +21,19 @@ def roll_dice(num_rolls, dice=six_sided):
     assert type(num_rolls) == int, 'num_rolls must be an integer.'
     assert num_rolls > 0, 'Must roll at least once.'
     # BEGIN PROBLEM 1
-    "*** YOUR CODE HERE ***"
+    total = 0
+    pig_out = False
+    while num_rolls != 0:
+        roll_result = dice()
+
+        # Pig Out
+        if roll_result == 1:
+            pig_out = True
+
+        total += roll_result
+        num_rolls -= 1
+
+    return 1 if pig_out else total
     # END PROBLEM 1
 
 
@@ -32,7 +44,9 @@ def free_bacon(score):
     """
     assert score < 100, 'The game should be over.'
     # BEGIN PROBLEM 2
-    "*** YOUR CODE HERE ***"
+    right_digit = score % 10
+    left_digit = score // 10
+    return 10 - min(right_digit, left_digit)
     # END PROBLEM 2
 
 
@@ -50,16 +64,29 @@ def take_turn(num_rolls, opponent_score, dice=six_sided):
     assert num_rolls <= 10, 'Cannot roll more than 10 dice.'
     assert opponent_score < 100, 'The game should be over.'
     # BEGIN PROBLEM 3
-    "*** YOUR CODE HERE ***"
+    if num_rolls == 0:
+        return free_bacon(opponent_score)
+
+    return roll_dice(num_rolls, dice)
     # END PROBLEM 3
 
+def leftmost_digit(n):
+    while n // 10 != 0:
+        n = n // 10
+    return n
+
+def rightmost_digit(n):
+    return n % 10
 
 def is_swap(player_score, opponent_score):
     """
     Return whether the two scores should be swapped
     """
     # BEGIN PROBLEM 4
-    "*** YOUR CODE HERE ***"
+    p_r, p_l = rightmost_digit(player_score), leftmost_digit(player_score)
+    o_r, o_l = rightmost_digit(opponent_score), leftmost_digit(opponent_score)
+
+    return p_r * p_l == o_r * o_l
     # END PROBLEM 4
 
 
@@ -97,13 +124,34 @@ def play(strategy0, strategy1, score0=0, score1=0, dice=six_sided,
     say:        The commentary function to call at the end of the first turn.
     feral_hogs: A boolean indicating whether the feral hogs rule should be active.
     """
+    feral0 = 0
+    feral1 = 0
+
     player = 0  # Which player is about to take a turn, 0 (first) or 1 (second)
     # BEGIN PROBLEM 5
-    "*** YOUR CODE HERE ***"
+    def handle_turn(strat, score, opponent, feral):
+        rolls = strat(score, opponent)
+        new_score = take_turn(rolls, opponent, dice)
+        if feral_hogs and abs(rolls - feral) == 2:
+            return new_score + 3, rolls
+        return new_score, rolls 
+
+    while score0 < goal and score1 < goal:
+        if player == 0:
+            new_score, feral0 = handle_turn(strategy0, score0, score1, feral0)
+            score0 += new_score
+        else:
+            new_score, feral1 =  handle_turn(strategy1, score1, score0, feral1)
+            score1 += new_score
+        
+        if is_swap(score0, score1):
+            score0, score1 = score1, score0
+        
+        say = say(score0, score1)
+        player = 1 - player
     # END PROBLEM 5
     # (note that the indentation for the problem 6 prompt (***YOUR CODE HERE***) might be misleading)
     # BEGIN PROBLEM 6
-    "*** YOUR CODE HERE ***"
     # END PROBLEM 6
     return score0, score1
 
@@ -189,7 +237,22 @@ def announce_highest(who, previous_high=0, previous_score=0):
     """
     assert who == 0 or who == 1, 'The who argument should indicate a player.'
     # BEGIN PROBLEM 7
-    "*** YOUR CODE HERE ***"
+
+    # What a mess! Great refactor opportunity.
+    def say(score0, score1):
+        if who == 0:
+            diff = score0 - previous_score
+            if diff > previous_high:
+                print(diff, "point(s)! That's the biggest gain yet for Player", who)
+                return announce_highest(who, diff, score0)
+            return announce_highest(who, previous_high, score0)
+        else:
+            diff = score1 - previous_score
+            if diff > previous_high:
+                print(diff, "point(s)! That's the biggest gain yet for Player", who)
+                return announce_highest(who, diff, score1)
+            return announce_highest(who, previous_high, score1)
+    return say
     # END PROBLEM 7
 
 
@@ -228,7 +291,15 @@ def make_averaged(fn, num_samples=1000):
     3.0
     """
     # BEGIN PROBLEM 8
-    "*** YOUR CODE HERE ***"
+    def average(*args):
+        k = num_samples
+        total = 0
+        while k > 0:
+            total += fn(*args)
+            k -= 1
+        
+        return total / num_samples
+    return average
     # END PROBLEM 8
 
 
@@ -242,7 +313,19 @@ def max_scoring_num_rolls(dice=six_sided, num_samples=1000):
     1
     """
     # BEGIN PROBLEM 9
-    "*** YOUR CODE HERE ***"
+    k = 10
+    best_score = 0
+    best_roll = 0
+    while k > 0:
+        averaged_roll_dice = make_averaged(roll_dice, num_samples)
+        average_score = averaged_roll_dice(k, dice)
+
+        if average_score >= best_score:
+            best_score = average_score
+            best_roll = k
+
+        k -= 1
+    return best_roll
     # END PROBLEM 9
 
 
@@ -291,7 +374,12 @@ def bacon_strategy(score, opponent_score, margin=8, num_rolls=4):
     rolls NUM_ROLLS otherwise.
     """
     # BEGIN PROBLEM 10
-    return 4  # Replace this statement
+    right_digit = opponent_score % 10
+    left_digit = opponent_score // 10
+    if 10 - right_digit >= margin or 10 - left_digit >= margin:
+        return 0
+    else:
+        return num_rolls
     # END PROBLEM 10
 
 
@@ -301,7 +389,16 @@ def swap_strategy(score, opponent_score, margin=8, num_rolls=4):
     non-beneficial swap. Otherwise, it rolls NUM_ROLLS.
     """
     # BEGIN PROBLEM 11
-    return 4  # Replace this statement
+    r_o = opponent_score % 10
+    l_o = opponent_score // 10
+    bacon = score + 10 - min(r_o, l_o)
+    #print(bacon, opponent_score, is_swap(bacon, opponent_score))
+    if is_swap(bacon, opponent_score) and bacon < opponent_score:
+        return 0
+    elif is_swap(bacon, opponent_score) and bacon > opponent_score:
+        return num_rolls
+    else:
+        return bacon_strategy(score, opponent_score, margin, num_rolls)
     # END PROBLEM 11
 
 
@@ -311,7 +408,9 @@ def final_strategy(score, opponent_score):
     *** YOUR DESCRIPTION HERE ***
     """
     # BEGIN PROBLEM 12
-    return 4  # Replace this statement
+
+    # boring! Maybe one day I'll return here
+    return swap_strategy(score, opponent_score)
     # END PROBLEM 12
 
 ##########################
