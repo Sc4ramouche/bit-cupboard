@@ -11,8 +11,7 @@ def lambda_curry2(func):
     >>> add_three(5)
     8
     """
-    "*** YOUR CODE HERE ***"
-    return ______
+    return lambda x: lambda y: func(x, y)
 
 def count_cond(condition):
     """Returns a function with one parameter N that counts all the numbers from
@@ -41,4 +40,11 @@ def count_cond(condition):
     >>> count_primes(20)   # 2, 3, 5, 7, 11, 13, 17, 19
     8
     """
-    "*** YOUR CODE HERE ***"
+    def count(n):
+        i, count = 1, 0
+        while i <= n:
+            if condition(n, i):
+                count += 1
+            i += 1
+        return count
+    return count
