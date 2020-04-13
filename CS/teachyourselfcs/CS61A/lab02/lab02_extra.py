@@ -35,7 +35,7 @@ def composite_identity(f, g):
     >>> b1(4)                            # (4 + 1)^2 != 4^2 + 1
     False
     """
-    "*** YOUR CODE HERE ***"
+    return lambda x: f(g(x)) == g(f(x))
 
 def cycle(f1, f2, f3):
     """Returns a function that is itself a higher-order function.
@@ -63,4 +63,18 @@ def cycle(f1, f2, f3):
     >>> do_two_cycles(1)
     19
     """
-    "*** YOUR CODE HERE ***"
+    def argument(n):
+        def apply(x):
+            i, value = 1, x
+            while i <= n:
+                if i % 3 == 1:
+                    update = f1(value)
+                elif i % 3 == 2:
+                    update = f2(value)
+                else: 
+                    update = f3(value)
+                value = update
+                i += 1
+            return value
+        return apply
+    return argument
