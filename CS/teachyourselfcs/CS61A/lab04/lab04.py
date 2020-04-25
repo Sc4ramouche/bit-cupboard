@@ -3,6 +3,7 @@
 
 this_file = __file__
 
+
 def skip_add(n):
     """ Takes a number n and returns n + n-2 + n-4 + n-6 + ... + 0.
 
@@ -17,10 +18,16 @@ def skip_add(n):
     ...       ['While', 'For'])
     True
     """
-    "*** YOUR CODE HERE ***"
+    if n < 2:
+        return n
+    else:
+        return n + skip_add(n - 2)
+
+
+skip_add(10)
+
 
 def summation(n, term):
-
     """Return the sum of the first n terms in the sequence defined by term.
     Implement using recursion!
 
@@ -38,7 +45,11 @@ def summation(n, term):
     True
     """
     assert n >= 1
-    "*** YOUR CODE HERE ***"
+    if n == 1:
+        return term(n)
+    else:
+        return term(n) + summation(n - 1, term)
+
 
 def gcd(a, b):
     """Returns the greatest common divisor of a and b.
@@ -53,7 +64,11 @@ def gcd(a, b):
     >>> gcd(40, 40)
     40
     """
-    "*** YOUR CODE HERE ***"
+    if max(a, b) % min(a, b) == 0:
+        return min(a, b)
+    else:
+        return gcd(min(a, b), max(a, b) % min(a, b))
+
 
 def couple(s1, s2):
     """Return a list that contains lists with i-th elements of two sequences
@@ -68,7 +83,8 @@ def couple(s1, s2):
     [['c', 's'], [6, '1']]
     """
     assert len(s1) == len(s2)
-    "*** YOUR CODE HERE ***"
+    return [[s1[i], s2[i]] for i in range(len(s1))]
+
 
 def enumerate(s, start=0):
     """Returns a list of lists, where the i-th list contains i+start and
@@ -78,9 +94,11 @@ def enumerate(s, start=0):
     >>> enumerate('five', 5)
     [[5, 'f'], [6, 'i'], [7, 'v'], [8, 'e']]
     """
-    "*** YOUR CODE HERE ***"
+    indices = list(range(start, start + len(s)))
+    return couple(indices, s)
 
 # Optional problems
+
 
 def squares(s):
     """Returns a new list containing square roots of the elements of the
@@ -95,6 +113,7 @@ def squares(s):
     """
     "*** YOUR CODE HERE ***"
 
+
 def key_of_min_value(d):
     """Returns the key in a dict d that corresponds to the minimum value of d.
     >>> letters = {'a': 6, 'b': 5, 'c': 4, 'd': 5}
@@ -104,6 +123,7 @@ def key_of_min_value(d):
     'c'
     """
     "*** YOUR CODE HERE ***"
+
 
 def ten_pairs(n):
     """Return the number of ten-pairs within positive integer n.
