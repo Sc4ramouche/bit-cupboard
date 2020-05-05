@@ -1,4 +1,5 @@
 """ Lab 04 """
+from math import sqrt
 
 
 this_file = __file__
@@ -111,7 +112,7 @@ def squares(s):
     >>> squares(seq)
     []
     """
-    "*** YOUR CODE HERE ***"
+    return [round(sqrt(n)) for n in s if sqrt(n) == round(sqrt(n))]
 
 
 def key_of_min_value(d):
@@ -122,7 +123,7 @@ def key_of_min_value(d):
     >>> key_of_min_value(letters)
     'c'
     """
-    "*** YOUR CODE HERE ***"
+    return min(d.keys(), key=lambda k: d[k])
 
 
 def ten_pairs(n):
@@ -135,4 +136,16 @@ def ten_pairs(n):
     >>> ten_pairs(9641469)
     6
     """
-    "*** YOUR CODE HERE ***"
+    if n == 0:
+        return 0
+
+    return occurs(n // 10, 10 - n % 10) + ten_pairs(n // 10)
+
+
+def occurs(number, k):
+    if number == 0:
+        return 0
+    elif number % 10 == k:
+        return 1 + occurs(number // 10, k)
+    else:
+        return occurs(number // 10, k)
