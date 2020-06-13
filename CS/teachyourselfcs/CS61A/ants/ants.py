@@ -293,8 +293,9 @@ class FireAnt(Ant):
     name = 'Fire'
     damage = 3
     # OVERRIDE CLASS ATTRIBUTES HERE
+    food_cost = 5
     # BEGIN Problem 5
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 5
 
     def __init__(self, armor=3):
@@ -308,9 +309,13 @@ class FireAnt(Ant):
         Make sure to damage each bee in the current place, and apply the bonus
         if the fire ant dies.
         """
-        # BEGIN Problem 5
-        "*** YOUR CODE HERE ***"
-        # END Problem 5
+        bees_copy = self.place.bees[:]
+        super().reduce_armor(amount)
+
+        if self.armor <= 0:
+            [bee.reduce_armor(self.damage + amount) for bee in bees_copy]
+        else:
+            [bee.reduce_armor(amount) for bee in bees_copy]
 
 
 class HungryAnt(Ant):
@@ -319,24 +324,33 @@ class HungryAnt(Ant):
     """
     name = 'Hungry'
     # OVERRIDE CLASS ATTRIBUTES HERE
+    food_cost = 4
+    time_to_digest = 3
+
     # BEGIN Problem 6
-    implemented = False   # Change to True to view in the GUI
+    implemented = True   # Change to True to view in the GUI
     # END Problem 6
 
     def __init__(self, armor=1):
         # BEGIN Problem 6
-        "*** YOUR CODE HERE ***"
+        Ant.__init__(self, armor)
+        self.digesting = 0
         # END Problem 6
 
     def eat_bee(self, bee):
         # BEGIN Problem 6
-        "*** YOUR CODE HERE ***"
+        bee.reduce_armor(bee.armor)
+        self.digesting = self.time_to_digest
         # END Problem 6
 
     def action(self, colony):
         # BEGIN Problem 6
-        "*** YOUR CODE HERE ***"
-        # END Problem 6
+        if self.digesting <= 0 and len(self.place.bees) != 0:
+            unfortunate_bee = random.choice(self.place.bees)
+            self.eat_bee(unfortunate_bee)
+        else:
+            self.digesting -= 1
+            # END Problem 6
 
 
 class NinjaAnt(Ant):
