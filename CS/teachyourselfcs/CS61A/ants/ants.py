@@ -370,9 +370,14 @@ class NinjaAnt(Ant):
         bees_copy = self.place.bees[:]
         [bee.reduce_armor(self.damage) for bee in bees_copy]
 
-# BEGIN Problem 8
-# The WallAnt class
-# END Problem 8
+class WallAnt(Ant):
+    name = 'Wall'
+    damage = 0
+    food_cost = 4
+    implemented = True
+
+    def __init__(self, armor=4):
+        super().__init__(armor)
 
 
 class BodyguardAnt(Ant):
