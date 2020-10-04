@@ -1,5 +1,3 @@
-
-
 def make_counter():
     """Return a counter function.
 
@@ -21,6 +19,17 @@ def make_counter():
     5
     """
     "*** YOUR CODE HERE ***"
+    d = {}
+
+    def counter(x):
+        if x in d:
+            d[x] += 1
+        else:
+            d[x] = 1
+
+        return d[x]
+
+    return counter
 
 
 class VendingMachine:
@@ -60,7 +69,41 @@ class VendingMachine:
     >>> w.vend()
     'Here is your soda.'
     """
-    "*** YOUR CODE HERE ***"
+
+    def __init__(self, product, price):
+        self.product = product
+        self.price = price
+        self.stock = 0
+        self.balance = 0
+
+    def is_empty(self):
+        return self.stock < 1
+
+    def vend(self):
+        if self.is_empty():
+            return 'Machine is out of stock.'
+        elif self.balance < self.price:
+            return 'You must deposit ${0} more.'.format(self.price - self.balance)
+        else:
+            change = self.balance - self.price
+            message = ' and ${0} change'.format(change) if change else ''
+
+            self.balance -= (self.price + change)
+            self.stock -= 1
+
+            return 'Here is your {0}{1}.'.format(self.product, message)
+
+    def deposit(self, amount):
+        if self.is_empty():
+            return 'Machine is out of stock. Here is your ${0}.'.format(amount)
+        else:
+            self.balance += amount
+            return 'Current balance: ${0}'.format(self.balance)
+
+    def restock(self, amount):
+        self.stock += amount
+        return 'Current {0} stock: {1}'.format(self.product, self.stock)
+
 
 def preorder(t):
     """Return a list of the entries in this tree in the order that they
@@ -72,7 +115,29 @@ def preorder(t):
     >>> preorder(Tree(2, [Tree(4, [Tree(6)])]))
     [2, 4, 6]
     """
-    "*** YOUR CODE HERE ***"
+
+    # concise, but perhaps not the most self-descriptive solution
+    # due to convoluted flattening logic
+    if not t:
+        return False
+    else:
+        branches = [preorder(n) for n in t.branches]
+        return [t.label] + [item for branch in branches for item in branch]
+
+    # this one is easier to follow,
+    # but uses additional function
+    # result = []
+
+    # def traverse(tree):
+    #     if not tree:
+    #         return False
+    #     else:
+    #         result.append(tree.label)
+    #         [traverse(n) for n in tree.branches]
+
+    # traverse(t)
+    # return result
+
 
 def store_digits(n):
     """Stores the digits of a positive number n in a linked list.
@@ -85,7 +150,18 @@ def store_digits(n):
     >>> store_digits(876)
     Link(8, Link(7, Link(6)))
     """
-    "*** YOUR CODE HERE ***"
+    def helper(n, l=None):
+        if n == 0:
+            return l
+        else:
+            t = Link(n % 10)
+            if l:
+                t.rest = l
+
+            return helper(n // 10, t)
+
+    return helper(n)
+
 
 def generate_paths(t, x):
     """Yields all possible paths from the root of t to a node with the label x
@@ -121,16 +197,15 @@ def generate_paths(t, x):
     >>> sorted(list(path_to_2))
     [[0, 2], [0, 2, 1, 2]]
     """
+    if t.label == x:
+        yield [x]
 
-    "*** YOUR CODE HERE ***"
-
-    for _______________ in _________________:
-        for _______________ in _________________:
-
-            "*** YOUR CODE HERE ***"
+    for b in t.branches:
+        for path in generate_paths(b, x):
+            yield [t.label] + path
 
 
-def remove_all(link , value):
+def remove_all(link, value):
     """Remove all the nodes containing value in link. Assume that the
     first element is never removed.
 
@@ -148,6 +223,8 @@ def remove_all(link , value):
     <0 1>
     """
     "*** YOUR CODE HERE ***"
+
+
 def deep_map(f, link):
     """Return a Link with the same structure as link but with fn mapped over
     its elements. If an element is an instance of a linked list, recursively
@@ -162,6 +239,8 @@ def deep_map(f, link):
     <<2 <4 6> 8> <<10>>>
     """
     "*** YOUR CODE HERE ***"
+
+
 class Mint:
     """A mint creates coins by stamping on years.
 
@@ -203,6 +282,7 @@ class Mint:
     def update(self):
         "*** YOUR CODE HERE ***"
 
+
 class Coin:
     def __init__(self, year):
         self.year = year
@@ -210,13 +290,16 @@ class Coin:
     def worth(self):
         "*** YOUR CODE HERE ***"
 
+
 class Nickel(Coin):
     cents = 5
+
 
 class Dime(Coin):
     cents = 10
 
 ## Link Class ##
+
 
 class Link:
     """A linked list.
@@ -261,6 +344,7 @@ class Link:
 
 ## Tree ADT ##
 
+
 class Tree:
     """
     >>> t = Tree(3, [Tree(2, [Tree(5)]), Tree(4)])
@@ -271,6 +355,7 @@ class Tree:
     >>> t.branches[1].is_leaf()
     True
     """
+
     def __init__(self, label, branches=[]):
         for b in branches:
             assert isinstance(b, Tree)
