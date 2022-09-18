@@ -64,3 +64,15 @@
 (defn map-to-csv
   [records]
   (clojure.string/join "\n" (map record-to-row records)))
+
+(defn sum ([vals] (sum vals 0))
+  ([vals accumulating-total]
+   (if (empty? vals)
+     accumulating-total
+     (recur (rest vals) (+ (first vals) accumulating-total)))))
+
+
+;; add a note on using `recur`.
+;; add a note on using shortcuts on require, an example:
+;;(require '[clojure.string as s])
+((comp inc *) 2 3)
